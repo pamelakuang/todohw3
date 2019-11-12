@@ -33,3 +33,38 @@ export const registerHandler = (newUser, firebase) => (dispatch, getState, { get
         dispatch(actionCreators.registerError);
     });
 };
+
+export const createTodoList = todoList => (dispatch, getState, { getFirestore }) => {
+    const fireStore = getFirestore();
+  //   const { profile } = getState().firebase;
+  //   const authorId = getState().firebase.auth.uid;
+    fireStore.collection('todoLists').add({
+      ...todoList,
+    }).then(() => dispatch({
+      type: 'CREATE_TODO_LIST',
+      todoList,
+    })).catch(err => dispatch({
+      type: 'CREATE_TODO_LIST_ERROR',
+      err,
+    }));
+  
+};
+
+export const editName = (todoList, newName) => (dispatch, getState, { getFirestore }) => {
+  const firestore = getFirestore();
+  //console.log(todoList.name);
+  firestore.collection('todoLists').doc(todoList.id).update({
+    ...todoList,
+    name: newName,
+  });
+  //console.log(todoList.name);
+
+};
+
+export const editOwner = (todoList, newOwner) => (dispatch, getState, { getFirestore }) => {
+  const firestore = getFirestore();
+  firestore.collection('todoLists').doc(todoList.id).update({
+    ...todoList,
+    owner: newOwner,
+  });
+};

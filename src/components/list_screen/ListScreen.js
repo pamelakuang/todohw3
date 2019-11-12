@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
 import { firestoreConnect } from 'react-redux-firebase';
+import { editName } from '../../store/database/asynchHandler';
+import { editOwner } from '../../store/database/asynchHandler';
+
 
 class ListScreen extends Component {
     state = {
@@ -13,11 +16,20 @@ class ListScreen extends Component {
 
     handleChange = (e) => {
         const { target } = e;
-
+        const { props } = this;
         this.setState(state => ({
             ...state,
             [target.id]: target.value,
         }));
+        
+        if (target.id === "name") {
+            this.props.todoList.name = target.value;
+            props.editName(this.props.todoList, this.props.todoList.name);
+        }
+        if (target.id === "owner") {
+            this.props.todoList.owner = target.value;
+            props.editOwner(this.props.todoList, this.props.todoList.owner);
+        }
     }
 
     render() {
@@ -25,6 +37,9 @@ class ListScreen extends Component {
         const todoList = this.props.todoList;
         if (!auth.uid) {
             return <Redirect to="/" />;
+        }
+        if (!todoList) {
+            return <React.Fragment/>
         }
 
         return (
@@ -48,16 +63,23 @@ const mapStateToProps = (state, ownProps) => {
   const { id } = ownProps.match.params;
   const { todoLists } = state.firestore.data;
   const todoList = todoLists ? todoLists[id] : null;
-  todoList.id = id;
+
+  if(todoList)
+    todoList.id = id;
 
   return {
     todoList,
     auth: state.firebase.auth,
   };
-};
+}
+
+const mapDispatchToProps = dispatch => ({
+    editName: (todoList, newName) => dispatch(editName(todoList, newName)),
+    editOwner: (todoList, newOwner) => dispatch(editOwner(todoList, newOwner)),
+  });
 
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   firestoreConnect([
     { collection: 'todoLists' },
   ]),
