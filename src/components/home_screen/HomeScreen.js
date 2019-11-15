@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { NavLink, Redirect, Link } from 'react-router-dom';
+import { Redirect, } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import TodoListLinks from './TodoListLinks'
 import { createTodoList } from '../../store/database/asynchHandler';
@@ -14,7 +14,7 @@ class HomeScreen extends Component {
         id: null,
     }
     handleNewList = () => {
-        const { props } = this;
+        //const { props } = this;
         const newList = {
             items: [],
             name: "Unknown",

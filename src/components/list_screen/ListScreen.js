@@ -53,6 +53,9 @@ class ListScreen extends Component {
                     <label htmlFor="password">Owner</label>
                     <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} value={todoList.owner} />
                 </div>
+                <div>Task</div>
+                <div>Due Date</div>
+                <div>Status</div>
                 <ItemsList todoList={todoList} />
             </div>
         );

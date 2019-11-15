@@ -3,55 +3,80 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
+import { editItem } from '../../store/database/asynchHandler';
 
 class ItemScreen extends Component {
 
     state = {
-        description:'',
-        assigned_to: '',
-        due_date: '',
-        completed: false,
+        description: this.props.item.description,
+        assigned_to: this.props.item.assigned_to,
+        due_date: this.props.item.due_date,
+        completed: this.props.item.completed,
         cancel: false,
+        submit: false,
+        itemid: this.props.itemid,
     }
 
     cancel = () => {
         this.setState({cancel: true});
     }
-    editItem = (e) => {
+
+    handleChange = (e) => {
         const { target } = e;
+        if (target.id === "description") 
+            this.setState({description: target.value});
+        if (target.id === "assigned_to")
+            this.setState({assigned_to: target.value});
+        if (target.id === "due_date")
+            this.setState({due_date: target.value});
+        if (target.id === "completed")
+            this.setState({completed: target.value});
+    }
+    itemChanges = (e) => {
         const { props } = this;
-        this.setState(state => ({
-            ...state,
-            [target.id]: target.value,
-        }));
-        props.editItem();
+        this.setState({
+            submit: true,
+        });
+        const todoItems = props.todoList.items;
+        const todoItem = {
+            description: this.state.description,
+            assigned_to: this.state.assigned_to,
+            due_date: this.state.due_date,
+            completed: this.state.completed,
+            key: this.state.itemid,
+        }
+        todoItems[props.item.id] = todoItem;
+        props.editItem(todoItems, props.todoList);
     }
     render() {
         const item = this.props.item; 
         
-        if (this.state.cancel) {
+        if (this.state.cancel || this.state.submit) {
             return <Redirect to={"/todoList/" + this.props.listid }/>
         }
         return (
             <div className="container white">
                 <div className="input-field">
                     <label htmlFor="description">Description</label>
-                    <input className="active" type="text" name="description" id="description" defaultValue={item ? item.description : null}/>
+                    <input className="active" type="text" name="description" id="description" onChange={this.handleChange} 
+                    defaultValue={item ? item.description : null}/>
                 </div>
                 <div className="input-field">
                     <label htmlFor="assigned_to">Assigned to</label>
-                    <input className="active" type="text" name="assigned_to" id="assigned_to" defaultValue={item ? item.assigned_to : null}/>
+                    <input className="active" type="text" name="assigned_to" id="assigned_to" onChange={this.handleChange} 
+                    defaultValue={item ? item.assigned_to : null}/>
                 </div>
                 <div className="date">
                     <label htmlFor="due_date">Due date</label>
-                    <input className="active" type="date" name="due_date" id="due_date" defaultValue={item ? item.due_date : null}/>
+                    <input className="active" type="date" name="due_date" id="due_date" onChange={this.handleChange} 
+                    defaultValue={item ? item.due_date : null}/>
                 </div>
                 <div className="checkbox">
-                    <label htmlFor="due_date">Completed</label>
-                    <p></p>
-                    <input className="active" type="checkbox" name="completed" id="completed" defaultChecked={item ? item.completed : false}/>
+                    <label htmlFor="check">Completed</label>
+                    <input className="active" type="checkbox" name="completed" id="check" onChange={this.handleChange} 
+                    defaultChecked={item ? item.completed : false}/>
                 </div>
-                <button id="submit" onClick={this.editItem}>Submit</button>
+                <button id="submit" onClick={this.itemChanges}>Submit</button>
                 <button id="cancel" onClick={this.cancel}>Cancel</button>
             </div>
         );
@@ -64,7 +89,8 @@ const mapStateToProps = (state, ownProps) => {
     const {todoLists} = state.firestore.data;
     const todoList = todoLists ? todoLists[listid] : null;
     const item = todoList ? todoList.items[itemid] : null;
-
+    item.id = itemid;
+    todoList.id = listid;
     return {
         todoList, 
         item,
@@ -73,8 +99,13 @@ const mapStateToProps = (state, ownProps) => {
         auth: state.firebase.auth,
       };
 }
+
+const mapDispatchToProps = dispatch => ({
+    editItem: (todoItem, todoList) => dispatch(editItem(todoItem, todoList)),
+});
+
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect([
       { collection: 'todoLists' },
     ]),

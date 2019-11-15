@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import ItemCard from './ItemCard';
 import { firestoreConnect } from 'react-redux-firebase';
 import { Link, Redirect } from 'react-router-dom';
+import { add } from '../../store/database/asynchHandler';
 
 class ItemsList extends React.Component {
 
@@ -11,6 +12,16 @@ class ItemsList extends React.Component {
         addItem: false,
     }
     addItem = () => {
+        const { props } = this;
+        const newItem = {
+            description: "",
+            assigned_to: "Unknown",
+            due_date: "",
+            completed: false,
+            key: this.props.todoList.items.length,
+        }
+        props.todoList.items.push(newItem);
+        props.add(props.todoList);
         this.setState({addItem: true});
     }
 
@@ -21,7 +32,7 @@ class ItemsList extends React.Component {
 
         if (this.state.addItem) {
             return (
-                <Redirect to={'/list/' + todoList.id + '/item/' + this.props.todoList.items.length}></Redirect>
+                <Redirect to={'/list/' + todoList.id + '/item/' + (items.length-1)}></Redirect>
             );
         }
         return (
@@ -35,7 +46,8 @@ class ItemsList extends React.Component {
                         </Link>
                     );})
                 }
-                <button id="add_item_button" onClick={this.addItem}>Add Item</button>
+                    <button id="add_item_button" onClick={this.addItem}>Add Item</button>
+                
             </div>
         );
     }
@@ -49,8 +61,12 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+const mapDispatchToProps = dispatch => ({
+    add: (todoList) => dispatch(add(todoList)),
+});
+
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect([
         { collection: 'todoLists' },
     ]),

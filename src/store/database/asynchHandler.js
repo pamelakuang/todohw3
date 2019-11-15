@@ -68,3 +68,18 @@ export const editOwner = (todoList, newOwner) => (dispatch, getState, { getFires
     owner: newOwner,
   });
 };
+
+export const editItem = (todoItem, todoList) => (dispatch, getState, { getFirestore}) => {
+  const firestore = getFirestore();
+  firestore.collection('todoLists').doc(todoList.id).update({
+    items:todoItem,
+  })
+
+}
+
+export const add = (todoList) => (dispatch, getState, { getFirestore}) => {
+  const firestore = getFirestore();
+  firestore.collection('todoLists').doc(todoList.id).update({
+    items:todoList.items,
+  })
+}
