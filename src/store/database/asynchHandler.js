@@ -83,3 +83,11 @@ export const add = (todoList) => (dispatch, getState, { getFirestore}) => {
     items:todoList.items,
   })
 }
+
+// export const addTime = (todoList, newTime) => (dispatch, getState, { getFirestore}) => {
+//   const firestore = getFirestore();
+//   firestore.collection('todoLists').doc(todoList.id).update({
+//     ...todoList, 
+//     time: newTime,
+//   })
+// }

@@ -18,6 +18,7 @@ class ItemsList extends React.Component {
             assigned_to: "Unknown",
             due_date: "",
             completed: false,
+            id: this.props.todoList.items.length,
             key: this.props.todoList.items.length,
         }
         props.todoList.items.push(newItem);
@@ -41,7 +42,6 @@ class ItemsList extends React.Component {
                     item.id = item.key;
                     return (
                         <Link to={'/list/' + todoList.id + '/item/' + item.id}>
-                        {/*<Link to={'/item/' + item.id}>*/}
                             <ItemCard todoList={todoList} item={item} />
                         </Link>
                     );})

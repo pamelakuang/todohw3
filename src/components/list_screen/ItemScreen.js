@@ -15,6 +15,7 @@ class ItemScreen extends Component {
         cancel: false,
         submit: false,
         itemid: this.props.itemid,
+        key: this.props.itemid,
     }
 
     cancel = () => {
@@ -43,7 +44,8 @@ class ItemScreen extends Component {
             assigned_to: this.state.assigned_to,
             due_date: this.state.due_date,
             completed: this.state.completed,
-            key: this.state.itemid,
+            id: this.state.itemid,
+            key: this.state.key,
         }
         todoItems[props.item.id] = todoItem;
         props.editItem(todoItems, props.todoList);
@@ -71,11 +73,13 @@ class ItemScreen extends Component {
                     <input className="active" type="date" name="due_date" id="due_date" onChange={this.handleChange} 
                     defaultValue={item ? item.due_date : null}/>
                 </div>
-                <div className="checkbox">
-                    <label htmlFor="check">Completed</label>
-                    <input className="active" type="checkbox" name="completed" id="check" onChange={this.handleChange} 
-                    defaultChecked={item ? item.completed : false}/>
-                </div>
+                <label>
+                    <label htmlFor="completed">Completed</label>
+                    <p></p>
+                    <input type="checkbox" checked={item ? item.completed : "checked"}/>
+                    <span></span>
+                </label>
+                <div></div>
                 <button id="submit" onClick={this.itemChanges}>Submit</button>
                 <button id="cancel" onClick={this.cancel}>Cancel</button>
             </div>
@@ -88,7 +92,12 @@ const mapStateToProps = (state, ownProps) => {
     const {itemid} = ownProps.match.params;
     const {todoLists} = state.firestore.data;
     const todoList = todoLists ? todoLists[listid] : null;
-    const item = todoList ? todoList.items[itemid] : null;
+    let item = null;
+    for (let i = 0; i < todoList.items.length; i++) {
+        if (todoList.items[i].id == itemid) {
+            item = todoList.items[i];
+        }
+    }
     item.id = itemid;
     todoList.id = listid;
     return {
