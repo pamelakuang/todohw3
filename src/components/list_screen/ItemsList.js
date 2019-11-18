@@ -42,7 +42,7 @@ class ItemsList extends React.Component {
                     item.id = item.key;
                     return (
                         <Link to={'/list/' + todoList.id + '/item/' + item.id}>
-                            <ItemCard todoList={todoList} item={item} />
+                            <ItemCard todoList={todoList} item={item}/>
                         </Link>
                     );})
                 }

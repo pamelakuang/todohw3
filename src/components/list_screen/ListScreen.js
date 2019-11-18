@@ -59,15 +59,7 @@ class ListScreen extends Component {
 
     sortTasks = (criteria) => {
         this.state.sortingCriteria = criteria;
-        for (let i = 0; i < this.props.todoList.items.length; i++) {
-            console.log(this.props.todoList.items[i].id);
-            console.log(this.props.todoList.items[i].key);
-        }
         this.props.todoList.items.sort(this.compare);
-        for (let i = 0; i < this.props.todoList.items.length; i++) {
-            console.log(this.props.todoList.items[i].id);
-            console.log(this.props.todoList.items[i].key);
-        }
         const firestore = getFirestore();
         firestore.collection('todoLists').doc(this.props.todoList.id).update({ 
             items: this.props.todoList.items,

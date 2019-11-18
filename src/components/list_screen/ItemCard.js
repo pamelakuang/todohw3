@@ -15,10 +15,10 @@ class ItemCard extends React.Component {
                     className="red"
                     large
                     >
-                    <Button floating icon={<Icon />} className="red"/>
-                    <Button floating icon={<Icon />} className="yellow darken-1" />
-                    <Button floating icon={<Icon />} className="green" />
-                    <Button floating icon={<Icon />} className="blue" />
+                    {/*<Button floating icon={<i className="material-icons">add</i>} className="red"/> */ }
+                    <Button floating icon={<i className="material-icons">arrow_upward</i>} className="yellow darken-1" />
+                    <Button floating icon={<i className="material-icons">arrow_downward</i>} className="green" />
+                    <Button floating icon={<i className="material-icons">clear</i>} className="blue" />
                     </Button>
                     <div>{item.assigned_to}</div>
                     <div>{item.due_date}</div>

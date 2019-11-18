@@ -92,13 +92,14 @@ const mapStateToProps = (state, ownProps) => {
     const {itemid} = ownProps.match.params;
     const {todoLists} = state.firestore.data;
     const todoList = todoLists ? todoLists[listid] : null;
-    let item = null;
+   // let item = null;
     for (let i = 0; i < todoList.items.length; i++) {
         if (todoList.items[i].id == itemid) {
-            item = todoList.items[i];
+            var item = todoList.items[i];
+            item.id = itemid;
         }
     }
-    item.id = itemid;
+    //item.id = itemid;
     todoList.id = listid;
     return {
         todoList, 
