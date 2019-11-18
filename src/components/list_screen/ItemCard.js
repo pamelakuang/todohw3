@@ -66,8 +66,13 @@ class ItemCard extends React.Component {
         const { todoList } = this.props;
         return (
             <div className="card z-depth-0 todo-list-link pink-lighten-3">
-                <div className="card-content grey-text text-darken-3">
-                    <span className="card-title">{item.description}</span>
+                <div className="card-content grey-text text-darken-3 row">
+                    <div className="col s4">
+                        <span className="card-title">{item.description}</span>
+                        <div>{item.assigned_to}</div>
+                    </div> 
+                        <span className="col s4">{item.due_date}</span>
+                        <span className="col s4">{item.completed ? "Completed" : "Pending"}</span>
                     <Button
                     floating
                     fab={{direction: 'left'}}
@@ -88,9 +93,6 @@ class ItemCard extends React.Component {
                     <Button floating icon={<i className="material-icons" onClick={e => this.deleteItem(e)}>clear</i>} className="blue" />
                     </Button>
                     
-                    <div>{item.assigned_to}</div>
-                    <div>{item.due_date}</div>
-                    <div>{item.completed}</div>
                 </div>
             </div>
         );

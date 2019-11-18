@@ -7,14 +7,21 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { editName } from '../../store/database/asynchHandler';
 import { editOwner } from '../../store/database/asynchHandler';
 import {getFirestore} from 'redux-firestore'
-
+import { Button } from 'react-materialize';
 
 class ListScreen extends Component {
     state = {
         name: '',
         owner: '',
         sortingCriteria: null,
+        delete: false,
     }
+
+    deleteList = () => {
+        const firestore = getFirestore();
+        firestore.collection('todoLists').doc(this.props.todoList.id).delete();
+        this.setState({delete: true});
+    }  
 
     handleChange = (e) => {
         const { target } = e;
@@ -120,9 +127,16 @@ class ListScreen extends Component {
             return <React.Fragment/>
         }
 
+        if (this.state.delete) {
+            return <Redirect to={"/" }/>
+        }
         return (
             <div className="container white">
                 <h5 className="grey-text text-darken-3">Todo List</h5>
+                <Button 
+                large
+                floating icon={<i className="material-icons" onClick={this.deleteList}>delete</i>} className="trash_black"/>
+
                 <div className="input-field">
                     <label htmlFor="email">Name</label>
                     <input className="active" type="text" name="name" id="name" onChange={this.handleChange} value={todoList.name} />
@@ -131,10 +145,12 @@ class ListScreen extends Component {
                     <label htmlFor="password">Owner</label>
                     <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} value={todoList.owner} />
                 </div>
+                <div className = "list-heading row blue darken-1">
+                    <div className="col s4"onClick={this.sortByTask}>Task</div>
+                    <div className="col s4"onClick={this.sortByDuedate}>Due Date</div>
+                    <div className="col s4"onClick={this.sortByStatus}>Status</div>
+                </div>
                 
-                <div onClick={this.sortByTask}>Task</div>
-                <div onClick={this.sortByDuedate}>Due Date</div>
-                <div onClick={this.sortByStatus}>Status</div>
                 <ItemsList todoList={todoList} />
             </div>
         );

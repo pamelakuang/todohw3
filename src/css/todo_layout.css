@@ -58,7 +58,18 @@ input[type=password]:not(.browser-default):focus:not([readonly]) + label{
   bottom: 40px;
 } 
 
+.trash_black {
+  left: 735px;
+}
 
+.list-heading {
+  height: 50px;
+  font-size: 30px;
+}
+
+.add_button {
+  text-align: center;
+}
 
 
 

@@ -30,10 +30,16 @@ class ItemScreen extends Component {
             this.setState({assigned_to: target.value});
         if (target.id === "due_date")
             this.setState({due_date: target.value});
-        if (target.id === "completed")
-            this.setState({completed: target.value});
+        if (target.id === "completed"){
+            if(this.state.completed===false)
+                this.setState({completed:true});
+            else
+                this.setState({completed:false});
+        }
+    
     }
     itemChanges = () => {
+        console.log(this.props.item);
         const { props } = this;
         this.setState({
             submit: true,
@@ -78,7 +84,7 @@ class ItemScreen extends Component {
                 <label>
                     <label htmlFor="completed">Completed</label>
                     <p></p>
-                    <input type="checkbox" defaultChecked={item ? item.completed : "checked"}/>
+                    <input id="completed" type="checkbox" onChange={e=>this.handleChange(e)} defaultChecked={item ? item.completed : "checked"}/>
                     <span></span>
                 </label>
                 <div></div>
@@ -94,14 +100,14 @@ const mapStateToProps = (state, ownProps) => {
     const {itemid} = ownProps.match.params;
     const {todoLists} = state.firestore.data;
     const todoList = todoLists ? todoLists[listid] : null;
-   // let item = null;
+
     for (let i = 0; i < todoList.items.length; i++) {
         if (todoList.items[i].id == itemid) {
             var item = todoList.items[i];
             item.id = itemid;
         }
     }
-    //item.id = itemid;
+    console.log(item);
     todoList.id = listid;
     return {
         todoList, 

@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
 import { Redirect } from 'react-router-dom';
-import { add } from '../../store/database/asynchHandler';
 
 class addItemScreen extends Component {
 
@@ -29,11 +28,11 @@ class addItemScreen extends Component {
 
     addNewItem = () => {
         this.setState({submit: true});
+        console.log("HIIIIii");
     }
 
     render() {
         const item = this.props.item; 
-        console.log("add item screen");
 
         if (this.state.cancel || this.state.submit) {
             return <Redirect to={"/todoList/" + this.props.listid }/>
@@ -75,14 +74,12 @@ const mapStateToProps = (state, ownProps) => {
     const {itemid} = ownProps.match.params;
     const {todoLists} = state.firestore.data;
     const todoList = todoLists ? todoLists[listid] : null;
-   // let item = null;
     for (let i = 0; i < todoList.items.length; i++) {
         if (todoList.items[i].id == itemid) {
             var item = todoList.items[i];
             item.id = itemid;
         }
     }
-    //item.id = itemid;
     todoList.id = listid;
     return {
         todoList, 

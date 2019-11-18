@@ -5,6 +5,7 @@ import ItemCard from './ItemCard';
 import { firestoreConnect } from 'react-redux-firebase';
 import { Link, Redirect } from 'react-router-dom';
 import { add } from '../../store/database/asynchHandler';
+import {Button} from 'react-materialize'
 
 class ItemsList extends React.Component {
 
@@ -14,7 +15,7 @@ class ItemsList extends React.Component {
     addItem = () => {
         const { props } = this;
         const newItem = {
-            description: "",
+            description: "Unknown",
             assigned_to: "Unknown",
             due_date: "",
             completed: false,
@@ -32,7 +33,6 @@ class ItemsList extends React.Component {
         console.log("ItemsList: todoList.id " + todoList.id);
 
         if (this.state.addItem) {
-            console.log("hi");
             return (
                 <Redirect to={'/addItemScreen/list/' + todoList.id + '/item/' + (items.length-1)}></Redirect>
             );
@@ -47,8 +47,10 @@ class ItemsList extends React.Component {
                         </Link>
                     );})
                 }
-                    <button id="add_item_button" onClick={this.addItem}>Add Item</button>
-                
+                <div className="add_button">
+                    <Button floating icon={<i className="material-icons" onClick={this.addItem}>add</i>} className="blue darken-1"></Button>
+                </div>
+
             </div>
         );
     }
