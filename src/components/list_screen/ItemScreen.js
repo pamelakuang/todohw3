@@ -33,12 +33,14 @@ class ItemScreen extends Component {
         if (target.id === "completed")
             this.setState({completed: target.value});
     }
-    itemChanges = (e) => {
+    itemChanges = () => {
         const { props } = this;
         this.setState({
             submit: true,
         });
         const todoItems = props.todoList.items;
+        var index = todoItems.indexOf(this.props.item);
+        console.log("index", index);
         const todoItem = {
             description: this.state.description,
             assigned_to: this.state.assigned_to,
@@ -47,7 +49,7 @@ class ItemScreen extends Component {
             id: this.state.itemid,
             key: this.state.key,
         }
-        todoItems[props.item.id] = todoItem;
+        todoItems[index] = todoItem;
         props.editItem(todoItems, props.todoList);
     }
     render() {

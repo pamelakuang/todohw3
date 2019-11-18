@@ -5,7 +5,7 @@ import { Redirect, } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import TodoListLinks from './TodoListLinks'
 import { createTodoList } from '../../store/database/asynchHandler';
-import { resolve } from 'url';
+//import { resolve } from 'url';
 import {getFirestore} from 'redux-firestore'
 
 class HomeScreen extends Component {
