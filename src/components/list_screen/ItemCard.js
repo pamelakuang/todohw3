@@ -4,25 +4,27 @@ import { getFirestore } from 'redux-firestore';
 
 class ItemCard extends React.Component {
     
-    deleteItem = () => {
-        console.log("delete");
-        // //event.preventDefault();
-        // var item = this.props.item;
-        // var todoList = this.props.todoList;
-        // let index = todoList.items.indexOf(item.id);
-        // let newItems = todoList.items.splice(index, 1);
-        // const firestore = getFirestore();
-        // firestore.collection('todoLists').doc(todoList.id).update({
-        //     items: newItems,
-        // })
+    deleteItem = (e) => {
+        e.preventDefault();
+        var item = this.props.item;
+        var todoList = this.props.todoList;
+        let index = todoList.items.indexOf(item);
+        let newItems = todoList.items;
+        newItems.splice(index, 1);
+        const firestore = getFirestore();
+        firestore.collection('todoLists').doc(todoList.id).update({
+            items: newItems,
+        })
     }
 
-    moveUp = () => {
+    moveUp = (e) => {
+        console.log("move up");
+        e.preventDefault();
         const currentItem = this.props.item;
         const todoList = this.props.todoList;
         const todoItems = todoList.items;
 
-        if (todoItems.indexOf[currentItem.id] > 0) {
+        if (todoItems.indexOf(currentItem) > 0) {
             let currentIndex = todoItems.indexOf(currentItem);
             let prevIndex = todoItems.indexOf(currentItem) - 1;
             todoItems[currentIndex] = todoItems[prevIndex];
@@ -35,12 +37,13 @@ class ItemCard extends React.Component {
         }
     }
 
-    moveDown = () => {
+    moveDown = (e) => {
+        e.preventDefault();
         let currentItem = this.props.item;
         const todoList = this.props.todoList;
         const todoItems = todoList.items;
 
-        if (todoItems.indexOf[currentItem.id] < (todoItems.length - 1)) {
+        if (todoItems.indexOf(currentItem) < (todoItems.length - 1)) {
             let currentIndex = todoItems.indexOf(currentItem);
             let nextIndex = todoItems.indexOf(currentItem) + 1;
             todoItems[currentIndex] = todoItems[nextIndex];
@@ -54,9 +57,13 @@ class ItemCard extends React.Component {
 
         
     }
+    stopBubble(e){
+        e.preventDefault();
+    }
 
     render() {
         const { item } = this.props; 
+        const { todoList } = this.props;
         return (
             <div className="card z-depth-0 todo-list-link pink-lighten-3">
                 <div className="card-content grey-text text-darken-3">
@@ -68,9 +75,17 @@ class ItemCard extends React.Component {
                     large
                     >
                     {/*<Button floating icon={<i className="material-icons">add</i>} className="red"/> */ }
-                    <Button floating icon={<i className="material-icons" onClick={this.moveUp}>arrow_upward</i>} className="yellow darken-1" />
-                    <Button floating icon={<i className="material-icons" onClick={this.moveDown}>arrow_downward</i>} className="green" />
-                    <Button floating icon={<i className="material-icons" onClick={this.deleteItem}>clear</i>} className="blue" />
+                    { (todoList.items.indexOf(item)=== 0) ? 
+                        <Button floating icon={<i className="material-icons grey" onClick={e=> this.stopBubble(e)}>arrow_upward</i>} className="yellow darken-1" /> :
+                        <Button floating icon={<i className="material-icons" onClick={e=> this.moveUp(e)}>arrow_upward</i>} className="yellow darken-1" />
+
+                    }
+                    { (todoList.items.indexOf(item) === todoList.items.length-1) ?
+                        <Button floating icon={<i className="material-icons grey" onClick={e => this.stopBubble(e)}>arrow_downward</i>} className="green" /> : 
+                        <Button floating icon={<i className="material-icons" onClick={e => this.moveDown(e)}>arrow_downward</i>} className="green" />
+
+                    }
+                    <Button floating icon={<i className="material-icons" onClick={e => this.deleteItem(e)}>clear</i>} className="blue" />
                     </Button>
                     
                     <div>{item.assigned_to}</div>

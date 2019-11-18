@@ -32,8 +32,9 @@ class ItemsList extends React.Component {
         console.log("ItemsList: todoList.id " + todoList.id);
 
         if (this.state.addItem) {
+            console.log("hi");
             return (
-                <Redirect to={'/list/' + todoList.id + '/item/' + (items.length-1)}></Redirect>
+                <Redirect to={'/addItemScreen/list/' + todoList.id + '/item/' + (items.length-1)}></Redirect>
             );
         }
         return (
