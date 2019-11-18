@@ -102,7 +102,7 @@ const mapStateToProps = (state, ownProps) => {
     const todoList = todoLists ? todoLists[listid] : null;
 
     for (let i = 0; i < todoList.items.length; i++) {
-        if (todoList.items[i].id == itemid) {
+        if (todoList.items[i].key == itemid) {
             var item = todoList.items[i];
             item.id = itemid;
         }
